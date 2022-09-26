@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Result</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="text-capitalize">Test Result</h2>
+                <p class='attribute'><strong>Start Time: </strong>2022-09-26 18:29:54</p>
+                <p class='attribute'><strong>Duration: </strong>1203.065s</p>
+                <p class='attribute'><strong>Status: </strong>Error: 1</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-md-10">
+                <table class='table table-hover table-responsive'>
+                    <thead>
+                        <tr>
+                            <th>reportes</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <tr class='warning'>
+                                <td class="col-xs-9">test_buscar (__main__.usando_unittest)</td>
+                                <td class="col-xs-3">
+                                    <span class="label label-warning">
+                                        
+                                            Error
+                                        
+                                    </span>
+                                    
+                                        &nbsp<button class="btn btn-default btn-xs">View</button>
+                                    
+                                </td>
+                            </tr>
+                            
+                                <tr style="display:none;">
+                                    <td class="col-xs-9">
+                                        <p>WebDriverException</p>
+                                        <p>Message: chrome not reachable
+  (Session info: chrome=105.0.5195.127)
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00D6DF13+2219795]
+	Ordinal0 [0x00D02841+1779777]
+	Ordinal0 [0x00C14100+803072]
+	Ordinal0 [0x00C09BF2+760818]
+	Ordinal0 [0x00BFC220+705056]
+	Ordinal0 [0x00C64F05+1134341]
+	Ordinal0 [0x00C5E7C3+1107907]
+	Ordinal0 [0x00C37F89+950153]
+	Ordinal0 [0x00C38F56+954198]
+	GetHandleVerifier [0x01062CB2+3040210]
+	GetHandleVerifier [0x01052BB4+2974420]
+	GetHandleVerifier [0x00E06A0A+565546]
+	GetHandleVerifier [0x00E05680+560544]
+	Ordinal0 [0x00D09A5C+1808988]
+	Ordinal0 [0x00D0E3A8+1827752]
+	Ordinal0 [0x00D0E495+1827989]
+	Ordinal0 [0x00D180A4+1867940]
+	BaseThreadInitThunk [0x76146739+25]
+	RtlGetFullPathName_UEx [0x77B18FD2+1218]
+	RtlGetFullPathName_UEx [0x77B18F9D+1165]
+</p>
+                                    </td>
+                                </tr>
+                            
+                        
+                        <tr>
+                            <td>
+                               Total Test Runned: 1
+                            </td>
+                            <td>
+                                <span>Error: 1</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('td').on('click', '.btn', function(e){
+                e.preventDefault();
+                var $this = $(this);
+                var $nextRow = $this.closest('tr').next('tr');
+                $nextRow.slideToggle("fast");
+                $this.text(function(i, text){
+                    if (text === 'View') {
+                        return 'Hide';
+                    } else {
+                        return 'View';
+                    };
+                });
+            });
+        });
+    </script>
+</body>
+</html>
