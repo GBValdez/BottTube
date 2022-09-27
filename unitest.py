@@ -1,9 +1,10 @@
-from ast import Not
+from ast import Not, Str
 from ctypes import cast
 from glob import glob
 from lib2to3.pgen2 import driver
 from multiprocessing.connection import wait
 from operator import imod
+from optparse import Option
 from pickle import GLOBAL
 from sqlite3 import Time
 from timeit import repeat
@@ -21,6 +22,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver import ActionChains
 import tkinter as tk
 import random
+from tkinter import messagebox as MessageBox
+from selenium.webdriver.chrome.service import Service as BraveService
+from webdriver_manager.core.utils import ChromeType
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.edge.service import Service as EdgeService
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 GMAIL=""
 CONTRA=""
@@ -37,11 +45,8 @@ class usando_unittest(unittest.TestCase):
         chrome_options.add_experimental_option("prefs",{
             "profile.default_content_setting_values.notifications":2
         })
-        #chrome_options.add_argument("window-size=1500,1200")
         self.driver= webdriver.Chrome(service= ChromeService(ChromeDriverManager().install()) ,chrome_options=chrome_options)
-    
-    
-    
+        #webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
     def test_buscar(self):
         extras= self.extras
         #Variable de busqueda
@@ -50,7 +55,8 @@ class usando_unittest(unittest.TestCase):
         pause= ActionChains(driver)
         wait = WebDriverWait(driver,10)
         #Abrimos la cancion de WARRIOS
-        driver.get("https://youtu.be/MLuOPeklG0U")
+        
+        driver.get("https://youtu.be/o3W5ngVTtRE")
         #Presionamos espacio para comenzar el video
         time.sleep(3)
         pause.send_keys(Keys.SPACE).perform()
@@ -110,22 +116,25 @@ class usando_unittest(unittest.TestCase):
                 elemento.click()
                 elemento= elemento.find_element(By.XPATH,"//*[@id='contenteditable-root']")
                 numero+=1
-                elemento.send_keys(COMENTA[No] + extras[random.randint(0,len(extras)-1)])
+                elemento.send_keys(COMENTA[No] +"\n" + extras[random.randint(0,len(extras)-1)])
                 No+=1
                 if No>= len(COMENTA):
                     No=0
                 elemento = wait.until(EC.element_to_be_clickable((By.ID,"submit-button")))
                 elemento.click()
                 time.sleep(0.5)
-                if numero==60:
+                if numero==20:
                     break
             except:
                 pass
+        self.numero=numero
+        MessageBox.showinfo("Hola ", "Se enviaron " + str(numero) + " comentarios con exito") 
             
 
     
     def tearDown(self) -> None:
         self.driver.close()
+        MessageBox.showinfo("Hola ", "Se enviaron " + str(self.numero) + " comentarios con exito")
         #driver.switch_to.window(driver.window_handles[0])
         #cls.driver.close()
 
@@ -139,8 +148,12 @@ def Automatizar():
     YOUTU= Canal.get()
     global COMENTA
     COMENTA= [textComentario.get(),textComentario1.get(),textComentario2.get()]
-    Ventana.destroy()
-    unittest.main()
+    
+    if GMAIL!="" and CONTRA!="" and YOUTU!="" and COMENTA[0]!="" and COMENTA[1]!="":
+        Ventana.destroy()
+        unittest.main()
+    else:
+        MessageBox.showinfo("Error ", "Llena todas las cajas de texto")
 
 def limitador(entry_text,Coment):
     if len(entry_text.get()) >= 0:
@@ -149,7 +162,8 @@ def limitador(entry_text,Coment):
         Extras=["XD",":3",":D","B)",":V"]
         Coment["text"]= Extras[random.randint(0,len(Extras)-1)]+ " " +  entry_text.get() + " " + Extras[random.randint(0,len(Extras)-1)]
 Ventana= tk.Tk()
-Ventana.geometry("400x500")
+Ventana.geometry("400x530")
+Ventana.title("BotTube")
 L_Titulo=tk.Label(Ventana,text="Bienvenido", font=("Arial",15))
 L_Titulo.pack()
 L_Correo= tk.Label(Ventana,text="Correo")
@@ -160,6 +174,7 @@ L_Clave= tk.Label(Ventana,text="Contraseña")
 L_Clave.pack()
 Clave= tk.Entry(Ventana,show="*")
 Clave.pack()
+Varmenu= tk.StringVar()
 L_Nota= tk.Label(Ventana,text="Nota: Es necesario que ingrese su" + 
     " correo y contraseña para realizar el envio masivo\nEste programa "
     + "no guardara dichos datos" ,wraplength=300)
@@ -200,4 +215,5 @@ Nota= tk.Label(Ventana,text="Nota: Solo se pueden enviar 5 caracteres maximo por
 Nota.pack()
 Enviar = tk.Button(Ventana,text="Comenzar envio masivo",command=Automatizar)
 Enviar.pack()
+Nota2= tk.Label(Ventana,text="Nota: Se enviara 1 comentario a 20 videos")
 Ventana.mainloop()
