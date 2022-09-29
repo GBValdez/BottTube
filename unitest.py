@@ -1,20 +1,11 @@
-from ast import Not, Str
-from ctypes import cast
-from glob import glob
-from lib2to3.pgen2 import driver
-from multiprocessing.connection import wait
-from operator import imod
-from optparse import Option
-from pickle import GLOBAL
-from sqlite3 import Time
-from timeit import repeat
+from logging import exception
+from select import select
 import unittest
-from warnings import catch_warnings
-from selenium import webdriver
+import selenium
 from selenium.webdriver.common.keys import Keys
 import time
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -23,35 +14,67 @@ from selenium.webdriver import ActionChains
 import tkinter as tk
 import random
 from tkinter import messagebox as MessageBox
-from selenium.webdriver.chrome.service import Service as BraveService
-from webdriver_manager.core.utils import ChromeType
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.edge.service import Service as EdgeService
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from multiprocessing import freeze_support
+freeze_support()
+import undetected_chromedriver as uc
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.webdriver import WebDriver
+from subprocess import CREATE_NO_WINDOW
+import subprocess 
+from selenium import webdriver
 
 GMAIL=""
 CONTRA=""
 COMENTA=[]
 YOUTU=""
 
+
 class usando_unittest(unittest.TestCase):
     #@classmethod
     def setUp(self) -> None:
         self.extras= ["Genial video", "Eres un grande", "Maravilloso","Buen video, ahora toca verlo", "Como siempre buen video" ]
-        chrome_options = Options()
+        chrome_options = uc.ChromeOptions()
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("--start-maximized")
+        chrome_options.add_argument("--disable-popup-blocking")
+        chrome_options.add_argument("--profile-directory=Default")
+        chrome_options.add_argument("--ignore-certificate-errors")
+        chrome_options.add_argument("--disable-plugins-discove  ry")
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        chrome_options.add_experimental_option('useAutomationExtension', False)
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        chrome_options.add_argument("--disable-popup-blocking")
         chrome_options.add_experimental_option("prefs",{
             "profile.default_content_setting_values.notifications":2
         })
-        self.driver= webdriver.Chrome(service= ChromeService(ChromeDriverManager().install()) ,chrome_options=chrome_options)
+        chromeser= ChromeService(ChromeDriverManager(path = r".\\Drivers").install())
+        chromeser.creationflags = CREATE_NO_WINDOW
+        vers=106
+        for i in range(0,2):
+            try:
+                self.driver= uc.Chrome(version_main=vers,
+                    use_subprocess=True,suppress_welcome=False ,chrome_options=chrome_options)
+            except Exception as e :
+                mensage=str(e)
+                vers=  mensage.find("Current browser version is ") + len("Current browser version is ")
+                mensage= mensage[vers:len(mensage)-1]
+                vers= mensage.find(".")
+                mensage= mensage[0:vers:1]
+                vers= int(mensage)
+                #self.driver.quit()
+
+
+                
+
+        self.driver.delete_all_cookies()
+        self.driver.execute_script('return navigator.webdriver')
         #webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
     def test_buscar(self):
         extras= self.extras
         #Variable de busqueda
         Buscar=YOUTU
         driver=self.driver
+        driver.fullscreen_window()
         pause= ActionChains(driver)
         wait = WebDriverWait(driver,10)
         #Abrimos la cancion de WARRIOS
@@ -63,7 +86,8 @@ class usando_unittest(unittest.TestCase):
         #Abrimos otra ventana
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[1])
-    
+        time.sleep(2)
+        
         driver.get("https://accounts.google.com/v3/signin/identifier?dsh=S537153464%3A1664174840240209&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&rip=1&sacu=1&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AQDHYWoOLLlwB3yPBvEOaF89OAA58hOJsGVzbN9h2B0w8TKJiEzIM0joMggPfXQyc8xe5MO_5MkR")
         elemento= wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@type="email"]')))
         elemento.send_keys(GMAIL)
@@ -71,7 +95,6 @@ class usando_unittest(unittest.TestCase):
         elemento= wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@type="password"]')))
         elemento.send_keys(CONTRA)
         elemento.send_keys(Keys.ENTER)
-        time.sleep(1)
         
         #Buscamos el canal que queremos
         Buscar=Buscar.replace(" ", "+")
@@ -128,7 +151,7 @@ class usando_unittest(unittest.TestCase):
             except:
                 pass
         self.numero=numero
-        MessageBox.showinfo("Hola ", "Se enviaron " + str(numero) + " comentarios con exito") 
+         
             
 
     
@@ -147,7 +170,7 @@ def Automatizar():
     global YOUTU
     YOUTU= Canal.get()
     global COMENTA
-    COMENTA= [textComentario.get(),textComentario1.get(),textComentario2.get()]
+    COMENTA= [L_ComenFinal.cget("text"),L_ComenFinal1.cget("text"),L_ComenFinal2.cget("text")]
     
     if GMAIL!="" and CONTRA!="" and YOUTU!="" and COMENTA[0]!="" and COMENTA[1]!="":
         Ventana.destroy()
