@@ -1,6 +1,7 @@
 from logging import exception
 from select import select
 import unittest
+from requests import options
 import selenium
 from selenium.webdriver.common.keys import Keys
 import time
@@ -15,12 +16,12 @@ import tkinter as tk
 import random
 from tkinter import messagebox as MessageBox
 import undetected_chromedriver as uc
-
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from subprocess import CREATE_NO_WINDOW
 import subprocess 
 from selenium import webdriver
+import pywhatkit 
 
 GMAIL=""
 CONTRA=""
@@ -46,13 +47,8 @@ class usando_unittest(unittest.TestCase):
         chrome_options.add_experimental_option("prefs",{
             "profile.default_content_setting_values.notifications":2
         })
-
         self.driver= uc.Chrome( driver_executable_path=ChromeDriverManager().install(),
             use_subprocess=True,suppress_welcome=False ,chrome_options=chrome_options)
-            
-
-                
-
         self.driver.delete_all_cookies()
         self.driver.execute_script('return navigator.webdriver')
         #webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()))
@@ -61,20 +57,9 @@ class usando_unittest(unittest.TestCase):
         #Variable de busqueda
         Buscar=YOUTU
         driver=self.driver
-        driver.fullscreen_window()
         pause= ActionChains(driver)
         wait = WebDriverWait(driver,10)
-        #Abrimos la cancion de WARRIOS
-        
-        driver.get("https://youtu.be/o3W5ngVTtRE")
-        #Presionamos espacio para comenzar el video
-        time.sleep(3)
-        pause.send_keys(Keys.SPACE).perform()
-        #Abrimos otra ventana
-        driver.execute_script("window.open('');")
-        driver.switch_to.window(driver.window_handles[1])
-        time.sleep(2)
-        
+        driver.maximize_window()
         driver.get("https://accounts.google.com/v3/signin/identifier?dsh=S537153464%3A1664174840240209&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&rip=1&sacu=1&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin&ifkv=AQDHYWoOLLlwB3yPBvEOaF89OAA58hOJsGVzbN9h2B0w8TKJiEzIM0joMggPfXQyc8xe5MO_5MkR")
         elemento= wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@type="email"]')))
         elemento.send_keys(GMAIL)
@@ -82,7 +67,7 @@ class usando_unittest(unittest.TestCase):
         elemento= wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@type="password"]')))
         elemento.send_keys(CONTRA)
         elemento.send_keys(Keys.ENTER)
-        
+        time.sleep(2)
         #Buscamos el canal que queremos
         Buscar=Buscar.replace(" ", "+")
         driver.get("https://www.youtube.com/results?search_query="+ Buscar + "&sp=EgIQAg%253D%253D")
@@ -110,8 +95,9 @@ class usando_unittest(unittest.TestCase):
             link= i.find_element(By.TAG_NAME,"a").get_attribute("href")
             link_videos.append(link)
 
-        numero=0
-        No=0
+        numero:int=0
+        No:int=0
+        erroes:int=0
         for i in link_videos:
             try:
                 driver.get(i)
@@ -126,6 +112,7 @@ class usando_unittest(unittest.TestCase):
                 elemento.click()
                 elemento= elemento.find_element(By.XPATH,"//*[@id='contenteditable-root']")
                 numero+=1
+                erroes=0
                 elemento.send_keys(COMENTA[No] +"\n" + extras[random.randint(0,len(extras)-1)])
                 No+=1
                 if No>= len(COMENTA):
@@ -133,10 +120,14 @@ class usando_unittest(unittest.TestCase):
                 elemento = wait.until(EC.element_to_be_clickable((By.ID,"submit-button")))
                 elemento.click()
                 time.sleep(0.5)
-                if numero==20:
+                if numero==15:
                     break
-            except:
-                pass
+            except Exception as e:
+                erroes+=1
+                print("Error papu " + str(erroes))
+                if erroes==25:
+                    break
+        
         self.numero=numero
          
             
@@ -161,6 +152,8 @@ def Automatizar():
     
     if GMAIL!="" and CONTRA!="" and YOUTU!="" and COMENTA[0]!="" and COMENTA[1]!="":
         Ventana.destroy()
+        pywhatkit.playonyt("imagine dragons warrios")
+        time.sleep(2)
         unittest.main()
     else:
         MessageBox.showinfo("Error ", "Llena todas las cajas de texto")
@@ -225,5 +218,5 @@ Nota= tk.Label(Ventana,text="Nota: Solo se pueden enviar 5 caracteres maximo por
 Nota.pack()
 Enviar = tk.Button(Ventana,text="Comenzar envio masivo",command=Automatizar)
 Enviar.pack()
-Nota2= tk.Label(Ventana,text="Nota: Se enviara 1 comentario a 20 videos")
+Nota2= tk.Label(Ventana,text="Nota: Se enviara 1 comentario a 15 videos")
 Ventana.mainloop()
