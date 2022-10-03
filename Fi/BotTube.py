@@ -155,7 +155,7 @@ def Automatizar():
     
     if GMAIL!="" and CONTRA!="" and YOUTU!="" and COMENTA[0]!="" and COMENTA[1]!="":
         Ventana.destroy()
-        pywhatkit.playonyt("imagine dragons warrios")
+        pywhatkit.playonyt("Imagine Dragons - Warriors (Lyrics)")
         time.sleep(2)
         unittest.main()
     else:
@@ -182,7 +182,7 @@ Clave= tk.Entry(Ventana,show="*")
 Clave.pack()
 Varmenu= tk.StringVar()
 L_Nota= tk.Label(Ventana,text="Nota: Es necesario que ingrese su" + 
-    " correo y contraseña para realizar el envio masivo\nEste programa "
+    " correo y contraseña para realizar los comentarios\nEste programa "
     + "no guardara dichos datos" ,wraplength=300)
 L_Nota.pack()
 L_Canal= tk.Label(Ventana,text="Youtuber o canal")
