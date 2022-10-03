@@ -218,5 +218,5 @@ Nota= tk.Label(Ventana,text="Nota: Solo se pueden enviar 5 caracteres maximo por
 Nota.pack()
 Enviar = tk.Button(Ventana,text="Comenzar envio masivo",command=Automatizar)
 Enviar.pack()
-Nota2= tk.Label(Ventana,text="Nota: Se enviara 1 comentario a 15 videos")
+Nota2= tk.Label(Ventana,text="Nota: Se enviara 1 comentario a 3 videos")
 Ventana.mainloop()
