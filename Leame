@@ -1,0 +1,15 @@
+Entorno virtual
+    Python 3.10.6
+
+    Librerías
+        Selenium 4.4.3
+        webdriver-manager 3.8.3
+        pywhatkit 5.4
+        undetected-chromedriver 3.1.5.post4
+
+
+            Comandos
+                pip install Selenium
+                pip install webdriver-manager
+                pip install pywhatkit 
+                pip install undetected-chromedriver
